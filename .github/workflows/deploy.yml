@@ -23,10 +23,21 @@ jobs:
         source: './deploy'
         target: '~'
 
-   # 환경변수 생성하기  
+   # 환경변수 생성하기
    #   - name: Setup Docker Compose .env with secrets
    #     run: |
    #       echo "test=${{ secrets.ENV_ }}" >> .env
+   
+    # 환경변수 생성하기  
+    - name: Create test file and .env file
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        script: |
+          echo "${{ secrets.DOT_ENV }}" > ~/deploy/.env
+          cat ~/deploy/.env
 
     - name: Deploy
       uses: appleboy/ssh-action@master
